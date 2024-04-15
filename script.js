@@ -1,22 +1,22 @@
-// script.js
+const choices = ['rock', 'paper', 'scissors'];
+const playerChoiceImg = document.getElementById("player-img");
+const computerChoiceImg = document.getElementById("computer-img");
+const gameResult = document.getElementById("game-result");
 
 let playerScore = 0;
 let computerScore = 0;
 
-document.getElementById("rock").addEventListener("click", function () {
-    playRound("rock");
-});
-
-document.getElementById("paper").addEventListener("click", function () {
-    playRound("paper");
-});
-
-document.getElementById("scissors").addEventListener("click", function () {
-    playRound("scissors");
+document.querySelectorAll(".choice").forEach(button => {
+    button.addEventListener("click", function () {
+        const playerSelection = this.id;
+        playRound(playerSelection);
+    });
 });
 
 function playRound(playerSelection) {
     const computerSelection = getComputerChoice();
+    displayChoice(playerSelection, playerChoiceImg);
+    displayChoice(computerSelection, computerChoiceImg);
 
     if (playerSelection === computerSelection) {
         displayResult("It's a tie! Play again.");
@@ -37,9 +37,12 @@ function playRound(playerSelection) {
 }
 
 function getComputerChoice() {
-    const choices = ['rock', 'paper', 'scissors'];
     const randomIndex = Math.floor(Math.random() * choices.length);
     return choices[randomIndex];
+}
+
+function displayChoice(choice, element) {
+    element.src = `${choice}.png`;
 }
 
 function displayResult(message) {
@@ -52,10 +55,10 @@ function updateScore() {
 
 function checkWinner() {
     if (playerScore === 5) {
-        displayResult("Congratulations! You win the game.");
+        gameResult.textContent = "Congratulations! You win the game.";
         resetGame();
     } else if (computerScore === 5) {
-        displayResult("Sorry, you lose the game.");
+        gameResult.textContent = "Sorry, you lose the game.";
         resetGame();
     }
 }
@@ -64,4 +67,10 @@ function resetGame() {
     playerScore = 0;
     computerScore = 0;
     updateScore();
+    setTimeout(() => {
+        gameResult.textContent = "";
+        document.getElementById("result").textContent = "";
+        playerChoiceImg.src = "";
+        computerChoiceImg.src = "";
+    }, 3000);
 }
